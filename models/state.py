@@ -1,8 +1,8 @@
 #!/usr/bin/python3
-
-
+'''Module that has the State class
+'''
 from models.base_model import BaseModel
 
-Class State(BaseModel):
 
+class State(BaseModel):
     name = ""
