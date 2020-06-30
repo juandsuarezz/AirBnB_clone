@@ -2,6 +2,7 @@
 """The console"""
 
 import cmd
+import shlex
 import models
 from models.amenity import Amenity
 from models.base_model import BaseModel
@@ -14,6 +15,8 @@ from datetime import datetime
 from ast import literal_eval
 import functools
 from shlex import split
+from models.engine import *
+
 
 classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
            "Place": Place, "Review": Review, "State": State, "User": User}
@@ -61,7 +64,9 @@ class HBNBCommand(cmd.Cmd):
         """shows string rep of an instance
         class name and id
         """
+
         arguments = inp.split()
+        models.storage.reload()
         if len(arguments) == 0:
             print("** class name missing **")
             return False
@@ -115,38 +120,38 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class doesn't exist **")
 
-    def do_update(self, line):
-        """Updates an instance based on the class
-        name and id by adding or updating attribute
-        """
-        commands = line.split()
-        objs = storage.all()
-        if not commands:
+    def do_update(self, inp):
+        """ update an instance based on its UUID """
+        models.storage.reload()
+        if len(inp) == 0:
             print("** class name missing **")
-            return None
-        if not commands[0] in self.classes:
-            print("** class doesn't exist **")
-            return None
-        if len(commands) < 4:
-            if len(commands) < 2:
+            return
+        else:
+            ac = shlex.split(inp)
+            if ac[0] not in classes:
+                print("** class doesn't exist **")
+                return
+            if ac[0] in classes and len(ac) < 2:
                 print("** instance id missing **")
-            elif len(commands) < 3:
-                print("** attribute name missing **")
-            elif len(commands) < 4:
-                print("** value missing **")
-            return None
-        key = "{}.{}".format(commands[0], commands[1])
-        if key not in objs:
-            print("** no instance found **")
-            return None
-        obj = objs[key]
-
-        try:
-            obj.__dict__[commands[2]] = eval(commands[3])
-            obj.save()
-        except Exception:
-            obj.__dict__[commands[2]] = commands[3]
-
+                return
+            tmp = ac[0] + '.' + ac[1]
+            if tmp in models.storage.all():
+                to_update = models.storage.all()[tmp].__dict__
+                if len(ac) < 3:
+                    print("** attribute name missing **")
+                elif len(ac) < 4:
+                    print("** value missing **")
+                else:
+                    key = ac[2]
+                    try:
+                        attr = type(to_update[key])
+                        value = attr(ac[3])
+                    except KeyError:
+                        value = ac[3]
+                    to_update[key] = value
+                    models.storage.save()
+            else:
+                print("** no instance found **")
      #################
     # Help Functions#
     #################
