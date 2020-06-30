@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""The console"""
+"""The console Hbnb"""
 
 import cmd
 import shlex
