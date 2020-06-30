@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""The console Hbnb"""
+"""The console"""
 
 import cmd
 import shlex
@@ -103,6 +103,7 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, inp):
         """prints all instances if they exist"""
         arguments = inp.split()
+        models.storage.reload()
         instance_list = []
         if len(arguments) == 0:
             for v in models.storage.all().values():
