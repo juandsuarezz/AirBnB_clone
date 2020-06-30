@@ -4,8 +4,16 @@ import uuid
 from datetime import datetime
 import models
 
-class BaseModel:
 
+"""
+Base class for all models will contain id, created_at and updated at attributes
+"""
+
+
+class BaseModel:
+    """
+    Instantiation of class BaseModel
+    """
     def __init__(self, *args, **kwargs):
 
         if kwargs:
@@ -19,20 +27,25 @@ class BaseModel:
             self.created_at = self.updated_at = datetime.now()
             models.storage.new(self)
 
-
     def __str__(self):
-
+        """
+        Method returns string representation
+        """
         return "[{}] ({}) {}".format(self.__class__.__name__,
                                      self.id,
                                      self.__dict__)
 
     def save(self):
-
+        """
+        Method to update attribute update_at
+        """
         self.updated_at = datetime.now()
         models.storage.save()
 
     def to_dict(self):
-
+        """
+        Method to return a dict containing all key/value of __dict__ instance
+        """
         dic = dict(**self.__dict__)
         dic['__class__'] = str(type(self).__name__)
         dic['created_at'] = self.created_at.isoformat()

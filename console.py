@@ -260,7 +260,6 @@ class HBNBCommand(cmd.Cmd):
         """
         self.class_exec('Review', args)
 
-
     def class_exec(self, cls_name, args):
             """Wrapper function for <class name>.action()"""
             if args[:6] == '.all()':
@@ -286,8 +285,8 @@ class HBNBCommand(cmd.Cmd):
                     except:
                         return
                     for j in dict.keys():
-                        self.do_update(cls_name + ' ' + new_arg[0][1:-3] + ' ' +
-                                       str(j) + ' ' + str(dict[j]))
+                        self.do_update(cls_name + ' ' + new_arg[0][1:-3] + ' '
+                                       + str(j) + ' ' + str(dict[j]))
                 else:
                     return
             else:
