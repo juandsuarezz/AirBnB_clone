@@ -32,7 +32,7 @@ class TestBaseModel(unittest.TestCase):
     def test_AtributtesClass(self):
         self.assertNotEqual(datetime.now(), self.inst.created_at)
         self.assertNotEqual(datetime.now(), self.inst.updated_at)
-        self.assertNotEqual(self.inst.created_at, self.inst.updated_at)
+        self.assertEqual(self.inst.created_at, self.inst.updated_at)
 
     def test_save(self):
         Instance = BaseModel()
