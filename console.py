@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-"""The console"""
+"""
+The console
+"""
 
 import cmd
 import shlex
